@@ -1,0 +1,29 @@
+groups: 
+- name: Skillfactory
+  rules:
+  - alert: SiteCodeChanged
+    expr: probe_http_status_code != 200
+    for: 0m
+    labels:
+      severity: critical
+    annotations:
+      summary: Skillfactory HTTP code failure (instance {{ $labels.instance }})
+      description: "HTTP status code is not 200 VALUE = {{ $value }}  LABELS: {{ $labels }}"
+
+  - alert: Site probe slow http
+    expr: avg_over_time(probe_duration_seconds[1m]) > 5
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: Skillfactory probe slow HTTP (instance {{ $labels.instance }})
+      description: "HTTP request took more than 5s  VALUE = {{ $value }}  LABELS = {{ $labels }}"
+  
+  - alert: Server restarted
+    expr: time() - process_start_time_seconds < 240
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: Server was restarted (instance {{ $labels.instance }})
+      description: "Uptime of node_exporter less that 4 min VALUE = {{ $value }}  LABELS = {{ $labels }}"

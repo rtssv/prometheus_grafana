@@ -1,0 +1,17 @@
+global:
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 10m
+  repeat_interval: 60m
+  receiver: 'email'
+receivers:
+- name: 'email'
+  email_configs:
+  - to: 'ваш email'
+    from: 'ваш email'
+    smarthost: 'smtp.mail.ru:465'
+    auth_username: 'логин'
+    auth_identity: 'логин'
+    auth_password: 'пароль'
+    require_tls: false
